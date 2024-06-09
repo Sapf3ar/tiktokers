@@ -19,6 +19,9 @@ sys.path.append("app/")
 
 from inference_pb2 import InferenceRequest, InferenceReply
 from inference_pb2_grpc import InferenceServerStub
+import grpc
+
+import numpy as np
 import scipy
 
 def convert(path, new_rate=48000) -> None:
