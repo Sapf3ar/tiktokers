@@ -5,7 +5,7 @@ docker building
 ```
 cd docker
 docker compose -p <unique-container-name> -f docker-compose.yml build
-docker compose -p <unique-container-name> -f docker-compose.yml up -d model_service
+docker compose -p <unique-container-name> -f docker-compose.yml up -d speechrec
 ```
 check logs
 ```
@@ -49,7 +49,7 @@ async def stt_request(path_to_audio : str,
 
 
 if __name__ == "__main__":
-	path = "/path/to/audio.wav"
-	convert(path)
-	print(await stt_request(path))
+    path = "/path/to/audio.wav"
+    convert(path)
+    print(await stt_request(path))
 ```
