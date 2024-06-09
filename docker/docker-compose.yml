@@ -10,7 +10,7 @@ services:
       - ../app:/app
     environment:
       - HOST=0.0.0.0
-      - PORT=5001
+      - PORT=5021
     ports:
-      - 5001:5001
+      - 5021:5021
     command: "python3.10 run.py"

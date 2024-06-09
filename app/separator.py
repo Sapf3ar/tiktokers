@@ -1,11 +1,3 @@
-import argparse
-import copy
-import json
-import os
-import pathlib
-import shutil
-
-import tqdm
 from audio_separator.separator import Separator
 
 import logging
@@ -33,8 +25,5 @@ class MySeparator:
         self.separator.load_model(model_filename="UVR-MDX-NET-Inst_HQ_3.onnx")
 
     def separate_audio(self, file_path):
-        output_file = self.separator.separate(file_path.as_posix())
-        file_dir = os.path.dirname(file_path.as_posix())
-        for _file in output_file:
-            if os.path.exists(_file):
-                shutil.move(_file, file_dir)
+        output_file = self.separator.separate(file_path)
+        return output_file[0]

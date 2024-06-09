@@ -2,6 +2,7 @@ import os
 import time
 import grpc
 import torch
+import scipy
 import logging
 import asyncio
 import librosa
@@ -10,9 +11,9 @@ from typing import Dict, Any
 from scipy.io.wavfile import read, write
 
 from inference_pb2 import InferenceRequest, InferenceReply
-from inference_pb2_grpc import InferenceServer, add_InferenceServerServicer_to_server
+from inference_pb2_grpc import InferenceServerServicer, add_InferenceServerServicer_to_server
 
-from proccess_dataset import Processor
+from stt_processor import Processor
 from separator import MySeparator
 
 
@@ -25,44 +26,48 @@ def start_server():
     try:
         audio_separator = MySeparator()
         audio_separator.load_model()
-        logging.info(f"Separator model loaded")
-        stt_runner = Processor(skip_exist=True, device=device)
+        logging.info("Separator model loaded")
+        stt_runner = Processor(device=device)
         stt_runner.load_model()
-        logging.info(f"Stt runner models loaded")
+        logging.info("STT runner models loaded")
         asyncio.run(serve())
     except Exception as e:
         logging.error(e)
         logging.shutdown()
 
 
+def convert(audio, sr, new_sr=16000):
+    number_of_samples = round(len(audio) * float(new_sr) / sr)
+    audio = scipy.signal.resample(audio, number_of_samples)
 
-class InferenceService(InferenceServer):
+    if len(audio.shape) > 1:
+        audio = (audio[:,0] + audio[:,1]) / 2
+
+    return audio
+
+class InferenceService(InferenceServerServicer):
     def __init__(self) -> None:
         super().__init__()
         self.user_data: Dict[Any, Any] = {}
 
-    async def inference(self,
-                        request: InferenceRequest,
-                        context) -> InferenceReply:
+    async def inference(self, request: InferenceRequest, context) -> InferenceReply:
         logging.info("Received request")
 
-        # read PCM16 wav format
-        # '<i2' means little-endian signed 2-byte integer
+        # Read PCM16 WAV format
         audio = np.frombuffer(request.audio, dtype='<i2')
-        # convert to librosa "floating point time series"
         write("audio.wav", 48000, audio)
 
         start = time.time()
-        audio_separator.separate_audio("audio.wav")
-        logging.info(f"Separation done in {time.time() - start}s")
+        separated_audio_path = audio_separator.separate_audio("./audio.wav")
+        logging.info(f"Separation done in {time.time() - start:.3f}s")
 
-        sr, audio = read("audio.wav")
-        audio = librosa.resample(audio, orig_sr=sr, target_sr=16000)
+        sr, audio = read(separated_audio_path)
         audio = audio.astype(np.float32) / 32768
+        audio = convert(audio, sr, new_sr=16000)
 
         start = time.time()
-        global_text = ".".join(text for text in stt_runner.process_audio(audio))
-        logging.info(f"Stt done in {time.time() - start}s")
+        global_text = " ".join(text for text in stt_runner.process_audio(audio))
+        logging.info(f"STT done in {time.time() - start:.3f}s")
 
         return InferenceReply(pred=global_text)
 
@@ -70,9 +75,10 @@ class InferenceService(InferenceServer):
 async def serve():
     server = grpc.aio.server()
     add_InferenceServerServicer_to_server(InferenceService(), server)
-    adddress = f"{os.environ['HOST']}:{os.environ['PORT']}"
-    server.add_insecure_port(adddress)
-    logging.info(f"Starting server on {adddress}")
+    address = f"{os.getenv('HOST', '127.0.0.1')}:{os.getenv('PORT', '5021')}"
+    logging.info(f"Addres: {address}")
+    server.add_insecure_port(address)
+    logging.info(f"Starting server on {address}")
     await server.start()
     await server.wait_for_termination()
 

@@ -1,5 +1,12 @@
 FROM nvidia/cuda:12.1.1-cudnn8-devel-ubuntu20.04
 
+# Prevents Python from writing pyc files.
+ENV PYTHONDONTWRITEBYTECODE=1
+
+# Keeps Python from buffering stdout and stderr to avoid situations where
+# the application crashes without emitting any logs due to buffering.
+ENV PYTHONUNBUFFERED=1
+
 ARG DEBIAN_FRONTEND=noninteractive
 
 RUN apt update -y && \
@@ -30,3 +37,5 @@ COPY ../app /workdir/
 WORKDIR /workdir/
 
 ENV LANG C.UTF-8
+
+CMD ["python3.10", "run.py"]
