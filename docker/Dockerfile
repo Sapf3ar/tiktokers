@@ -1,4 +1,4 @@
-FROM nvidia/cuda:11.1.1-cudnn8-devel-ubuntu20.04
+FROM nvidia/cuda:12.1.1-cudnn8-devel-ubuntu20.04
 
 ARG DEBIAN_FRONTEND=noninteractive
 
@@ -21,11 +21,10 @@ COPY ./docker/requirements.txt /
 RUN python3.10 -m pip install -r requirements.txt
 RUN python3.10 -m pip install git+https://huggingface.co/kontur-ai/sbert_punc_case_ru
 RUN python3.10 -m pip install git+https://github.com/NVIDIA/NeMo.git@1fa961ba03ab5f8c91b278640e29807079373372#egg=nemo_toolkit[all]
-RUN python3.10 -m pip install "audio-separator[gpu]"
+RUN python3.10 -m pip install "audio-separator[cpu]"
 
 RUN mkdir -p /workdir
 RUN mkdir -p /workdir/data
-COPY ../weights /workdir/weights
 COPY ../app /workdir/
 
 WORKDIR /workdir/

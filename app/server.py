@@ -7,21 +7,28 @@ import asyncio
 import librosa
 import numpy as np
 from typing import Dict, Any
+from scipy.io.wavfile import read, write
 
 from inference_pb2 import InferenceRequest, InferenceReply
 from inference_pb2_grpc import InferenceServer, add_InferenceServerServicer_to_server
 
 from proccess_dataset import Processor
+from separator import MySeparator
 
 
 def start_server():
     global stt_runner
-    device = "cuda" if torch.cuda.is_available else "cpu"
+    global audio_separator
+    device = "cuda" if torch.cuda.is_available() else "cpu"
 
     logging.info(f"Start stt model service on {device}")
     try:
+        audio_separator = MySeparator()
+        audio_separator.load_model()
+        logging.info(f"Separator model loaded")
         stt_runner = Processor(skip_exist=True, device=device)
         stt_runner.load_model()
+        logging.info(f"Stt runner models loaded")
         asyncio.run(serve())
     except Exception as e:
         logging.error(e)
@@ -43,8 +50,15 @@ class InferenceService(InferenceServer):
         # '<i2' means little-endian signed 2-byte integer
         audio = np.frombuffer(request.audio, dtype='<i2')
         # convert to librosa "floating point time series"
-        audio = audio.astype('float') / 32768
-        audio = librosa.resample(audio, orig_sr=48000, target_sr=16000)
+        write("audio.wav", 48000, audio)
+
+        start = time.time()
+        audio_separator.separate_audio("audio.wav")
+        logging.info(f"Separation done in {time.time() - start}s")
+
+        sr, audio = read("audio.wav")
+        audio = librosa.resample(audio, orig_sr=sr, target_sr=16000)
+        audio = audio.astype(np.float32) / 32768
 
         start = time.time()
         global_text = ".".join(text for text in stt_runner.process_audio(audio))
