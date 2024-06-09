@@ -1,0 +1,17 @@
+syntax = "proto3";
+
+// The inference service definition.
+service InferenceServer {
+  // Sends a inference reply
+  rpc inference (InferenceRequest) returns (InferenceReply) {}
+}
+
+// The request message containing the audio bytes.
+message InferenceRequest {
+    bytes audio = 1;
+}
+
+// The response message containing the classes ids
+message InferenceReply {
+    string pred = 1;
+}

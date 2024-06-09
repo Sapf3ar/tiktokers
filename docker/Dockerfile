@@ -1,0 +1,33 @@
+FROM nvidia/cuda:11.1.1-cudnn8-devel-ubuntu20.04
+
+ARG DEBIAN_FRONTEND=noninteractive
+
+RUN apt update -y && \
+    apt-get install -y wget build-essential checkinstall libreadline-gplv2-dev libncursesw5-dev libssl-dev libsqlite3-dev tk-dev libgdbm-dev libc6-dev libbz2-dev libffi-dev zlib1g-dev lzma liblzma-dev && \
+    cd /usr/src && \
+    wget https://www.python.org/ftp/python/3.10.14/Python-3.10.14.tgz && \
+    tar xzf Python-3.10.14.tgz && \
+    cd Python-3.10.14 && \
+    ./configure --enable-optimizations && \
+    make altinstall \
+    && apt-get update -y \
+    && apt-get install pip -y \
+    && apt-get install git -y \
+    && apt-get install vim -y \
+    && apt-get install ffmpeg -y
+
+RUN pip install --upgrade pip
+COPY ./docker/requirements.txt /
+RUN python3.10 -m pip install -r requirements.txt
+RUN python3.10 -m pip install git+https://huggingface.co/kontur-ai/sbert_punc_case_ru
+RUN python3.10 -m pip install git+https://github.com/NVIDIA/NeMo.git@1fa961ba03ab5f8c91b278640e29807079373372#egg=nemo_toolkit[all]
+RUN python3.10 -m pip install "audio-separator[gpu]"
+
+RUN mkdir -p /workdir
+RUN mkdir -p /workdir/data
+COPY ../weights /workdir/weights
+COPY ../app /workdir/
+
+WORKDIR /workdir/
+
+ENV LANG C.UTF-8
