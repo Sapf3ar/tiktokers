@@ -14,8 +14,11 @@ docker compose -p <unique-container-name> -f docker-compose.yml logs --follow
 
 ## How to send requests
 ```
-from app.inference_pb2 import InferenceRequest, InferenceReply
-from app.inference_pb2_grpc import InferenceServerStub
+import sys
+sys.path.append("app/")
+
+from inference_pb2 import InferenceRequest, InferenceReply
+from inference_pb2_grpc import InferenceServerStub
 import scipy
 
 def convert(path, new_rate=48000) -> None:
