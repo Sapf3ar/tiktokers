@@ -34,9 +34,12 @@ class TextExtractor:
         return frames
 
     def _read_text_from_frames(self, frames, max_image_size, batch_size):
-        return self.reader.readtext_batched(
-            frames, detail=1, canvas_size=max_image_size, batch_size=batch_size
-        )
+        return [
+            self.reader.readtext(
+                frame, detail=1, canvas_size=max_image_size, batch_size=batch_size
+            )
+            for frame in frames
+        ]
 
     def _get_filtered_text_from_result(self, image_result, confidence_threshold):
         text = " ".join(
