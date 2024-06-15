@@ -5,7 +5,7 @@ docker building
 ```
 cd docker
 docker compose -p <unique-container-name> -f docker-compose.yml -f gpu.docker-compose.yml build
-docker compose -p <unique-container-name> -f docker-compose.yml -f gpu.docker-compose.yml up -d model_service
+docker compose -p <unique-container-name> -f docker-compose.yml -f gpu.docker-compose.yml up -d speechrec
 ```
 check logs
 ```
