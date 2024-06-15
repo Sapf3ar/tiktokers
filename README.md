@@ -4,24 +4,18 @@
 docker building
 ```
 cd docker
-docker compose -p <unique-container-name> -f docker-compose.yml build
-docker compose -p <unique-container-name> -f docker-compose.yml up -d speechrec
+docker compose -p <unique-container-name> -f docker-compose.yml -f gpu.docker-compose.yml build
+docker compose -p <unique-container-name> -f docker-compose.yml -f gpu.docker-compose.yml up -d model_service
 ```
 check logs
 ```
-docker compose -p <unique-container-name> -f docker-compose.yml logs --follow
+docker compose -p <unique-container-name> -f docker-compose.yml -f gpu.docker-compose.yml logs --follow
 ```
 
 ## How to send requests
 ```
-import sys
-sys.path.append("app/")
-
-from inference_pb2 import InferenceRequest, InferenceReply
-from inference_pb2_grpc import InferenceServerStub
-import grpc
-
-import numpy as np
+from app.inference_pb2 import InferenceRequest, InferenceReply
+from app.inference_pb2_grpc import InferenceServerStub
 import scipy
 
 def convert(path, new_rate=48000) -> None:
@@ -55,7 +49,7 @@ async def stt_request(path_to_audio : str,
 
 
 if __name__ == "__main__":
-    path = "/path/to/audio.wav"
-    convert(path)
-    print(await stt_request(path))
+	path = "/path/to/audio.wav"
+	convert(path)
+	print(await stt_request(path))
 ```

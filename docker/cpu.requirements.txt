@@ -1,0 +1,5 @@
+onnxruntime
+grpcio-tools==1.54.2
+asyncio==3.4.3
+psycopg2-binary==2.9.7
+librosa==0.10.1

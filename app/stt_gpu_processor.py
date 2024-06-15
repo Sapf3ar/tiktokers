@@ -17,7 +17,7 @@ class Processor:
     def load_model(self):
         logging.info("INITIALIZING ASR MODEL")
         model = EncDecRNNTBPEModel.from_config_file("./weights/rnnt_model_config.yaml")
-        ckpt = torch.load("./weights/rnnt_model_weights.ckpt", map_location=self.device)
+        ckpt = torch.load("./weights/rnnt_model_weights.ckpt", map_location=self.device.split(":")[0])
         model.load_state_dict(ckpt, strict=False)
         model.eval()
         model = model.to(self.device)

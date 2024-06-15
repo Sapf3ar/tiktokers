@@ -1,0 +1,13 @@
+version: "3.3"
+services:
+  speechrec:
+    build:
+      dockerfile: ./docker/Dockerfile.gpu
+    runtime: nvidia
+    environment:
+      - device=cuda:1
+      - HOST=0.0.0.0
+      - PORT=5022
+    ports:
+      - 5022:5022
+    command: "python3.10 run.py"
