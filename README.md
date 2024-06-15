@@ -1,16 +1,27 @@
-1.  Video captioning (Тимур, Игорь)
-	1.  llava-next / ...
-2. STT (Егор)
-	1. vosk 
-3. OCR (Артем)
-	1. чтобы побыстрее 
-4.  деплой (Данил)
-	1. cloud.ru
-	2. faiss
-	3. fast-api
-5. реранк (мистер Х) 
+# OCR
 
-discarded:
-- микс видео эмбеддингов и текст эмбеддингов
-- автокомплит кейвордами
-- топик моделинг для сужения области поиска
+## Getting started
+
+Install dependencies:
+
+`pip install -r -requirements.txt`
+
+To get recognized text from the video:
+
+```python
+from text_extractor import TextExtractor
+
+text_extractor = TextExtractor()
+video_link = <link_to_the_video>
+texts = text_extractor.extract_text(video_link)
+
+unique_texts = list(dict.fromkeys(texts))
+video_text = " ".join(unique_texts)
+```
+
+Parameters of `extract_text` method:
+- **sample_rate**: sampling rate when receiving a frame from a video
+- **confidence_threshold**: the threshold for filtering texts in which the model is not confident enough
+- **max_image_size**: the maximum image size of the larger side to resize the image
+- **max_frames**: the maximum number of frames captured from a video
+- **batch_size**: batch size for OCR model
