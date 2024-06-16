@@ -1,16 +1,24 @@
-1.  Video captioning (Тимур, Игорь)
-	1.  llava-next / ...
-2. STT (Егор)
-	1. vosk 
-3. OCR (Артем)
-	1. чтобы побыстрее 
-4.  деплой (Данил)
-	1. cloud.ru
-	2. faiss
-	3. fast-api
-5. реранк (мистер Х) 
+# Video captioning module
 
-discarded:
-- микс видео эмбеддингов и текст эмбеддингов
-- автокомплит кейвордами
-- топик моделинг для сужения области поиска
+Модуль для генерации описаний к видео.
+
+Для генерации видео используется модель LLaVA-Next, версия [LLaVA-NeXT-Video-7B-DPO](https://huggingface.co/lmms-lab/LLaVA-NeXT-Video-7B-DPO).
+
+## Установка
+
+1. Установите LLaVA-NeXT, следуя инструкции на их [официальном репозитории](https://github.com/LLaVA-VL/LLaVA-NeXT/tree/inference).
+2. Установите зависимости: ```pip install -r requirements.txt```
+
+## Использование
+
+Можно использовать кэпшенинг в коде, импортируйте класс `VideoCaptioner`:
+```python
+from llava import VideoCaptioner
+
+captioner = VideoCaptioner("cuda")
+print(captioner.get_caption("path/to/video.mp4"))
+```
+
+Чтобы запустить воркер, который подключиться к серверу и будет выполнять задания, нужно:
+1. Настроить конфиг в файле [run_worker.py](run_worker.py)
+2. Запустить: `python run_worker.py`
