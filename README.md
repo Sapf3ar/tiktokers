@@ -69,13 +69,13 @@ fastapi run --host 0.0.0.0 --port 443 main.py
 ```
 
 ## 2. Инструкция по развертыванию Speechrecognition backend
-### Развёртывание docker на gpu
+### Сборка докер-контейнера на gpu
 ```
 cd speechrecognition/docker
 docker compose -p <unique-container-name> -f docker-compose.yml -f gpu.docker-compose.yml build
 docker compose -p <unique-container-name> -f docker-compose.yml -f gpu.docker-compose.yml up -d speechrec
 ```
-### Развёртывание docker на cpu
+### Сборка докер-контейнера на cpu
 ```
 cd speechrecognition/docker
 docker compose -p <unique-container-name> -f docker-compose.yml build
