@@ -234,3 +234,217 @@ video_text = text_extractor.extract_text(video_link)
 - **max_image_size**: максимальный размер большей стороны изображения
 - **max_frames**: максимальное количество кадров, взятых из видео
 - **batch_size**: batch size для модели OCR.
+
+## 6. Серверная часть
+
+
+Добавьте задачу для обработки видео:
+```
+curl -X POST "http://localhost:8000/add_task/{link}" -d ""
+```
+
+Проверка статуса задачи
+Проверьте статус задачи по её идентификатору:
+
+```
+curl -X GET "http://localhost:8000/get_task_status?task_id={task_id}"
+```
+
+Получение последней задачи
+Получите последнюю добавленную задачу:
+
+```
+curl -X GET "http://localhost:8000/get_task"
+```
+
+Поиск по суммаризациям
+Ищите видео по суммаризации:
+
+```
+curl -X POST "http://localhost:8000/search" -H "Content-Type: application/json" -d '{"query": "search term"}'
+```
+
+Модель данных
+Task
+id_ (int): Уникальный идентификатор задачи
+execution_time (int): Время выполнения задачи
+video_link (str): Ссылка на видео
+caption (str): Описание видео
+error (str): Ошибка, если она произошла
+
+
+IndexTask
+task_id (int): Идентификатор задачи
+link (str): Ссылка на видео
+
+
+Query
+query (str): Поисковый запрос
+
+
+Item
+id (str): Идентификатор элемента
+name (str): Имя элемента
+
+
+Swagger API Documentation:
+
+
+```
+openapi: 3.0.2
+info:
+  title: Video Insight Summarizer API
+  version: 1.0.0
+paths:
+  /push_last_task:
+    post:
+      summary: Add the last task for processing
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Task'
+      responses:
+        '200':
+          description: Task done
+          content:
+            application/json:
+              schema:
+                type: string
+                example: Task done
+        '400':
+          description: Task failed with error
+          content:
+            application/json:
+              schema:
+                type: string
+                example: Task {id} exited with {error}
+
+  /get_task_status:
+    get:
+      summary: Get status of a task by its ID
+      parameters:
+        - in: query
+          name: task_id
+          schema:
+            type: integer
+      responses:
+        '200':
+          description: Task status
+          content:
+            application/json:
+              schema:
+                type: string
+                example: Task finished with {status}
+        '400':
+          description: Task not found
+          content:
+            application/json:
+              schema:
+                type: string
+                example: Task not found
+
+  /get_task:
+    get:
+      summary: Get the last added task
+      responses:
+        '200':
+          description: Last task
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/IndexTask'
+        '400':
+          description: No tasks found
+          content:
+            application/json:
+              schema:
+                type: string
+                example: No tasks found
+
+  /add_task/{link}:
+    post:
+      summary: Add a task to process video from the link
+      parameters:
+        - in: path
+          name: link
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Task added
+          content:
+            application/json:
+              schema:
+                type: string
+                example: Task {TASK_ID} added
+        '400':
+          description: Error adding task
+          content:
+            application/json:
+              schema:
+                type: string
+                example: Error adding task
+
+  /search:
+    post:
+      summary: Perform a search over video summaries
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Query'
+      responses:
+        '200':
+          description: Search results
+          content:
+            application/json:
+              schema:
+                type: object
+                additionalProperties:
+                  type: string
+        '400':
+          description: Search failed
+          content:
+            application/json:
+              schema:
+                type: string
+                example: Search failed
+
+components:
+  schemas:
+    Task:
+      type: object
+      properties:
+        id_:
+          type: integer
+        execution_time:
+          type: integer
+        video_link:
+          type: string
+        caption:
+          type: string
+        error:
+          type: string
+    IndexTask:
+      type: object
+      properties:
+        task_id:
+          type: integer
+        link:
+          type: string
+    Query:
+      type: object
+      properties:
+        query:
+          type: string
+    Item:
+      type: object
+      properties:
+        id:
+          type: string
+        name:
+          type: string
+```
