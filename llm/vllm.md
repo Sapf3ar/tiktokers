@@ -1,23 +1,14 @@
 ### vllm serve
-Требуемые ресурсы: 
+Note: 
 ```
 LLaMA 3 8B requires around 16GB of disk space and 20GB of VRAM (GPU memory) in FP16. 
-```
-- Установка зависимостей
-
-```
-pip install -r requirements.txt
 ```
 
 - Зарегистрироваться на HuggingFace и подписать лицензионное соглашние, загрузить модель. [link](https://huggingface.co/meta-llama/Meta-Llama-3-8B)
 
-
 ```
-pip install -U "huggingface_hub[cli]"
-
 huggingface-cli download meta-llama/Meta-Llama-3-8B --include "original/*" --local-dir <PATH_TO_CKPT>
 ```
-
 
 - Запустить vLLM сервер:
 
