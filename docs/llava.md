@@ -20,5 +20,5 @@ print(captioner.get_caption("path/to/video.mp4"))
 ```
 
 Чтобы запустить воркер, который подключиться к серверу и будет выполнять задания, нужно:
-1. Настроить конфиг в файле [run_worker.py](run_worker.py)
+1. Настроить конфиг в файле [run_worker.py](../run_worker.py)
 2. Запустить: `python run_worker.py`
