@@ -63,41 +63,38 @@
 ---
 
 ## 1. Инструкция по установке и развертыванию Backend
-### How to start
 ```
 cd backend
 fastapi run --host 0.0.0.0 --port 443 main.py
 ```
 
 ## 2. Инструкция развертыванию Speechrecognition backend
-### How to start
-docker build on gpu
+### Развёртывание docker на gpu
 ```
 cd speechrecognition/docker
 docker compose -p <unique-container-name> -f docker-compose.yml -f gpu.docker-compose.yml build
 docker compose -p <unique-container-name> -f docker-compose.yml -f gpu.docker-compose.yml up -d speechrec
 ```
-docker build on cpu
+### Развёртывание docker на cpu
 ```
 cd speechrecognition/docker
 docker compose -p <unique-container-name> -f docker-compose.yml build
 docker compose -p <unique-container-name> -f docker-compose.yml up -d speechrec
 ```
-check logs
+### Проверка логов
 ```
 docker compose -p <unique-container-name> -f docker-compose.yml -f gpu.docker-compose.yml logs --follow
 ```
 
-### Environment variables
+### Переменные окружения
 In docker-compose.yml:
 - use_separator - including/excluding music separation from audio (True or False)
 - HOST - host address of docker container
 - PORT - port of docker container
-in gpu.docker-compose.yml:
 - device - inference device (cuda or cuda:0 or cpu)
 
 
-### How to send requests
+### Инструкция отправки запросов к сервису
 ```
 import sys
 sys.path.append("speechrecognition/app")
