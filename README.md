@@ -87,11 +87,11 @@ docker compose -p <unique-container-name> -f docker-compose.yml -f gpu.docker-co
 ```
 
 ### Переменные окружения
-In docker-compose.yml:
-- use_separator - including/excluding music separation from audio (True or False)
-- HOST - host address of docker container
-- PORT - port of docker container
-- device - inference device (cuda or cuda:0 or cpu)
+В docker-compose.yml:
+- use_separator - включение/выключение фильтрации музыки в аудио (True или False)
+- HOST - хост адрес докер-контейнера
+- PORT - порт докер-контейнера
+- device - устройство инференса моделей (cuda или cuda:0 или cpu)
 
 
 ### Инструкция отправки запросов к сервису
