@@ -130,9 +130,9 @@ async def stt_request(path_to_audio : str,
 
 
 if __name__ == "__main__":
-	path = "/path/to/audio.wav"
-	convert(path)
-	print(await stt_request(path))
+    path = "/path/to/audio.wav"
+    convert(path)
+    print(await stt_request(path))
 ```
 
 ### 2. Video captioning module
