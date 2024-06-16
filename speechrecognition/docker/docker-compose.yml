@@ -1,0 +1,16 @@
+version: "3.3"
+services:
+  speechrec:
+    build:
+      context: ..
+      dockerfile: ./docker/Dockerfile.cpu
+    restart: always
+    volumes:
+      - ../app:/app
+    environment:
+      - HOST=0.0.0.0
+      - PORT=5025
+      - use_separator=False
+    ports:
+      - 5025:5025
+    command: "python3 run.py"
