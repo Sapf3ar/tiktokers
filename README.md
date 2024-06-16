@@ -214,13 +214,13 @@ print(text)
 
 ## Инструкция по установке и использованию OCR module
 
-### Getting started
+### Начало работы
 
-Install dependencies:
+Установите зависимости:
 
 `pip install -r -requirements.txt`
 
-To get recognized text from the video:
+Для получения текста из видео выполните код ниже:
 
 ```python
 from text_extractor import TextExtractor
@@ -230,10 +230,10 @@ video_link = <link_to_the_video>
 video_text = text_extractor.extract_text(video_link)
 ```
 
-Parameters of `extract_text` method:
-- **video_link**: link to the video to get the text from
-- **sample_rate**: sampling rate when receiving a frame from a video
-- **confidence_threshold**: the threshold for filtering texts in which the model is not confident enough
-- **max_image_size**: the maximum image size of the larger side to resize the image
-- **max_frames**: the maximum number of frames captured from a video
-- **batch_size**: batch size for OCR model
+Параметры метода `extract_text`:
+- **video_link**: путь до ссылки на видео, с которого будет распознан текст
+- **sample_rate**: частота дискретизации при получении кадров из видео
+- **confidence_threshold**: порог для фильтрации текстов, в предсказании которых модель недостаточно уверена
+- **max_image_size**: максимальный размер большей стороны изображения
+- **max_frames**: максимальное количество кадров, взятых из видео
+- **batch_size**: batch size для модели OCR.
