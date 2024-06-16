@@ -68,7 +68,7 @@ cd backend
 fastapi run --host 0.0.0.0 --port 443 main.py
 ```
 
-## 2. Инструкция развертыванию Speechrecognition backend
+## 2. Инструкция по развертыванию Speechrecognition backend
 ### Развёртывание docker на gpu
 ```
 cd speechrecognition/docker
