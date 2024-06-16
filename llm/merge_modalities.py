@@ -90,6 +90,6 @@ def call_vllm_api(
         "temperature": temperature,
     }
 
-    response = requests.post(url, headers=headers, json=data)
+    response = requests.post(url, headers=headers, json=data, timeout=5)
     text = response.json()["choices"][0]["message"]["content"]
     return text
