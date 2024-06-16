@@ -1,5 +1,3 @@
-# pylint: skip-file
-
 import os
 import math
 import logging
@@ -405,7 +403,7 @@ def modified_beam_search_LODR(
 
     # get initial lm score and lm state by scoring the "sos" token
     sos_token = torch.tensor([[sos_id]]).to(torch.int64).to("cpu")
-    # lens = torch.tensor([1]).to("cpu")
+
     init_score, init_states = LM(sos_token)
 
     B = [HypothesisList() for _ in range(N)]
@@ -421,11 +419,7 @@ def modified_beam_search_LODR(
                 ),  # state of the source domain ngram
             )
         )
-    # print("PACKED", packed_encoder_out.data.shape, '\n', packed_encoder_out.data, '\n')
-    # encoder_out = model.encoder_proj(packed_encoder_out.data)
-    # print("AFTER ENCODER PROJ")
-    # print(packed_encoder_out.data.shape)
-    # print(packed_encoder_out.data)
+
     offset = 0
     finalized_B = []
     for batch_size in batch_size_list:
@@ -433,10 +427,7 @@ def modified_beam_search_LODR(
         end = offset + batch_size
         current_encoder_out = packed_encoder_out.data[start:end]  # get batch
         current_encoder_out = current_encoder_out
-        # print("\nENCODER DATA CHANGE")
-        # print(current_encoder_out.shape)
-        # print(current_encoder_out)
-        # current_encoder_out's shape is (batch_size, 1, 1, encoder_out_dim)
+
         offset = end
 
         finalized_B = B[batch_size:] + finalized_B
@@ -456,24 +447,15 @@ def modified_beam_search_LODR(
             device="cpu",
             dtype=torch.int64,
         )  # (num_hyps, context_size)
-        # print("\nDECODER INPUT")
-        # print(decoder_input)
+
         decoder_out = model.run_decoder(decoder_input)
-        # print("\nDECODER OUT")
-        # print(decoder_out.shape)
-        # print(decoder_out)
-        # decoder_out = model.decoder_proj(decoder_out)
-        # print("\nAFTER DECODER PROJ")
-        # print(decoder_out.shape)
-        # print(decoder_out)
+
         current_encoder_out = torch.index_select(
             current_encoder_out,
             dim=0,
             index=hyps_shape.row_ids(1).to(torch.int64),
         )
-        # print("\nLAST ENCODER CHANGE")
-        # print(current_encoder_out.shape)
-        # print(current_encoder_out)
+
         logits = model.run_joiner(
             current_encoder_out,
             decoder_out,
@@ -486,10 +468,6 @@ def modified_beam_search_LODR(
         vocab_size = log_probs.size(-1)
 
         log_probs = log_probs.reshape(-1)
-
-        # print("\nPROBS")
-        # print(log_probs.shape)
-        # print(log_probs)
 
         row_splits = hyps_shape.row_splits(1) * vocab_size
         log_probs_shape = k2.ragged.create_ragged_shape2(
@@ -521,39 +499,19 @@ def modified_beam_search_LODR(
 
                 new_token = topk_token_indexes[k]
                 if new_token not in (blank_id, unk_id):
-                    # if LM.lm_type == "rnn":
                     token_list.append([new_token])
                     # store the LSTM states
                     hs.append(hyp.state[0])
                     cs.append(hyp.state[1])
-                    # else:
-                    #     # for transformer LM
-                    #     token_list.append(
-                    #         [sos_id] + hyp.ys[context_size:] + [new_token]
-                    #     )
 
         # forward NN LM to get new states and scores
         if len(token_list) != 0:
-            x_lens = torch.tensor([len(tokens) for tokens in token_list]).to("cpu")
-            # if LM.lm_type == "rnn":
             tokens_to_score = (
                 torch.tensor(token_list).to(torch.int64).to().reshape(-1, 1)
             )
             hs = torch.cat(hs, dim=1).to()
             cs = torch.cat(cs, dim=1).to()
             state = (hs, cs)
-            # else:
-            #     # for transformer LM
-            #     tokens_List = [torch.tensor(tokens) for tokens in token_list]
-            #     tokens_to_score = (
-            #         torch.nn.utils.rnn.pad_sequence(
-            #             tokens_List, batch_first=True, padding_value=0.0
-            #         )
-            #         .to()
-            #         .to(torch.int64)
-            #     )
-
-            #     state = None
 
             scores, lm_states = LM(tokens_to_score, state)
 
