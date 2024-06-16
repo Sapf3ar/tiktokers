@@ -265,29 +265,29 @@ curl -X POST "http://localhost:8000/search" -H "Content-Type: application/json" 
 ```
 
 Модель данных
-Task
-id_ (int): Уникальный идентификатор задачи
-execution_time (int): Время выполнения задачи
-video_link (str): Ссылка на видео
-caption (str): Описание видео
-error (str): Ошибка, если она произошла
+#### Task
+- id_ (int): Уникальный идентификатор задачи
+- execution_time (int): Время выполнения задачи
+- video_link (str): Ссылка на видео
+- caption (str): Описание видео
+- error (str): Ошибка, если она произошла
 
 
-IndexTask
-task_id (int): Идентификатор задачи
-link (str): Ссылка на видео
+#### IndexTask
+- task_id (int): Идентификатор задачи
+- link (str): Ссылка на видео
 
 
-Query
-query (str): Поисковый запрос
+#### Query
+- query (str): Поисковый запрос
 
 
-Item
-id (str): Идентификатор элемента
-name (str): Имя элемента
+#### Item
+- id (str): Идентификатор элемента
+- name (str): Имя элемента
 
 
-Swagger API Documentation:
+Swagger API Documentation
 
 
 ```
