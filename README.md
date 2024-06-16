@@ -29,7 +29,7 @@
   - `process_video_stt(local_path_video: str) -> str`: Извлекает аудиотрек из видео и обрабатывает его для получения текста.
 
 - **OCR (Optical Character Recognition):** Модуль `text_extractor.py` извлекает текст из видео.
-  - `extract_text(video_link: str, sample_rate: float, confidence_threshold: float, max_image_size: int, max_frames: int, batch_size: int) -> list[str]`: Извлекает текст из видео, используя EasyOCR.
+  - `extract_text(video_link: str, sample_rate: float, confidence_threshold: float, max_image_size: int, max_frames: int, batch_size: int) -> str`: Извлекает текст из видео, используя EasyOCR.
 
 - **Суммаризация:** Модуль `api.py` объединяет данные из OCR, ASR и описания видео для создания суммаризации с помощью вызова языковой модели.
   - `summary_modalities(asr, ocr, caption, call_llm, model_path) -> str`: Создает суммаризацию на основе текста из ASR, OCR и описания видео, вызывая языковую модель.
@@ -227,10 +227,7 @@ from text_extractor import TextExtractor
 
 text_extractor = TextExtractor()
 video_link = <link_to_the_video>
-texts = text_extractor.extract_text(video_link)
-
-unique_texts = list(dict.fromkeys(texts))
-video_text = " ".join(unique_texts)
+video_text = text_extractor.extract_text(video_link)
 ```
 
 Parameters of `extract_text` method:
