@@ -1,3 +1,5 @@
+# pylint: skip-file
+
 from google.protobuf import message as _message
 from google.protobuf import descriptor as _descriptor
 from typing import ClassVar as _ClassVar, Optional as _Optional

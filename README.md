@@ -16,6 +16,7 @@ docker compose -p <unique-container-name> -f docker-compose.yml -f gpu.docker-co
 ```
 from app.inference_pb2 import InferenceRequest, InferenceReply
 from app.inference_pb2_grpc import InferenceServerStub
+import numpy as np
 import scipy
 
 def convert(path, new_rate=48000) -> None:

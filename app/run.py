@@ -70,7 +70,7 @@ def download_if_not_exist(path, url):
         logging.info(f"File {path} not found")
         logging.info(f"Download from {url}")
         process = subprocess.Popen(
-            f"gdown --folder 'https://drive.google.com/drive/folders/1-Yl9KDIjuxaYlxsFJB8jO3htRbRU1CdH?usp=sharing'", shell=True, stdout=subprocess.PIPE)
+            "gdown --folder 'https://drive.google.com/drive/folders/1-Yl9KDIjuxaYlxsFJB8jO3htRbRU1CdH?usp=sharing'", shell=True, stdout=subprocess.PIPE)
         process.wait()
         if process.returncode != 0:
             logging.error("Download failed!")
@@ -85,9 +85,10 @@ def download_models():
 
 
 def check_models_files():
-    if not (os.path.exists("./weights/tokenizer_all_sets") and
-                os.path.isfile("./weights/rnnt_model_weights.ckpt")):
-            download_models()
+    is_tokenizer_exists = os.path.exists("./weights/tokenizer_all_sets")
+    is_weights_exists = os.path.isfile("./weights/rnnt_model_weights.ckpt")
+    if not (is_tokenizer_exists and is_weights_exists):
+        download_models()
 
 
 if __name__ == "__main__":

@@ -1,3 +1,5 @@
+# pylint: skip-file
+
 import os
 import math
 import logging
