@@ -64,7 +64,7 @@
 
 ## 5. Инструкция по установке и развертыванию
 
-### Speechrecognition backend
+### 1. Speechrecognition backend
 #### How to start
 docker build on gpu
 ```
@@ -135,7 +135,7 @@ if __name__ == "__main__":
 	print(await stt_request(path))
 ```
 
-### Video captioning module
+### 2. Video captioning module
 
 Модуль для генерации описаний к видео.
 
@@ -160,7 +160,7 @@ print(captioner.get_caption("path/to/video.mp4"))
 1. Настроить конфиг в файле [run_worker.py](../run_worker.py)
 2. Запустить: `python run_worker.py`
 
-### vllm serve
+### 3. vllm serve
 Note: 
 ```
 LLaMA 3 8B requires around 16GB of disk space and 20GB of VRAM (GPU memory) in FP16. 
