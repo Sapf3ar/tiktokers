@@ -151,7 +151,7 @@ if __name__ == "__main__":
 ### Установка
 
 1. Установите LLaVA-NeXT, следуя инструкции на их [официальном репозитории](https://github.com/LLaVA-VL/LLaVA-NeXT/tree/inference).
-2. Установите зависимости: ```pip install -r requirements.txt```
+2. Установите зависимости: ```pip install -r llava/requirements.txt```
 
 ### Использование
 
@@ -175,7 +175,7 @@ LLaMA 3 8B requires around 16GB of disk space and 20GB of VRAM (GPU memory) in F
 - Установка зависимостей
 
 ```
-pip install -r requirements.txt
+pip install -r llm/requirements.txt
 ```
 
 - Зарегистрироваться на HuggingFace и подписать лицензионное соглашние, загрузить модель. [link](https://huggingface.co/meta-llama/Meta-Llama-3-8B)
@@ -218,7 +218,7 @@ print(text)
 
 Install dependencies:
 
-`pip install -r -requirements.txt`
+`pip install -r backend/requirements.txt`
 
 To get recognized text from the video:
 
