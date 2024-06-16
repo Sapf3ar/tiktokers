@@ -94,8 +94,10 @@ in gpu.docker-compose.yml:
 
 #### How to send requests
 ```
-from app.inference_pb2 import InferenceRequest, InferenceReply
-from app.inference_pb2_grpc import InferenceServerStub
+import sys
+sys.path.append("speechrecognition/app")
+from inference_pb2 import InferenceRequest, InferenceReply
+from inference_pb2_grpc import InferenceServerStub
 import numpy as np
 import scipy
 
@@ -116,7 +118,7 @@ def convert(path, new_rate=48000) -> None:
 
 
 async def stt_request(path_to_audio : str,
-                      server_ : str = "172.21.0.88:5021",
+                      server_ : str = "172.21.0.88:5022",
                       ) -> str:
     async with grpc.aio.insecure_channel(server_) as channel:
         stub = InferenceServerStub(channel)
