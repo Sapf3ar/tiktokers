@@ -10,7 +10,6 @@ from stt import process_video_stt
 from text_extractor import TextExtractor
 from api import summary_modalities, call_vllm_api
 from sentence_transformers import SentenceTransformer
-from openai import OpenAI
 
 import urllib.request
 from urllib.parse import urlparse
@@ -50,7 +49,6 @@ embedder = SentenceTransformer('intfloat/multilingual-e5-base')
 task_queue = queue.SimpleQueue()
 text_extactor = TextExtractor()
 total_data = pd.read_csv("13k_with_summary.csv")
-client = OpenAI()
 
 index = faiss.read_index("data/faiss.index")
 TASK_ID = 1

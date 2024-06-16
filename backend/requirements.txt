@@ -1,0 +1,12 @@
+easyocr==1.7.1
+loguru==0.7.2
+fastapi
+pandas
+faiss
+numpy
+sentence_transformers
+grpcio-tools==1.54.2
+asyncio==3.4.3
+psycopg2-binary==2.9.7
+librosa==0.10.1
+scipy

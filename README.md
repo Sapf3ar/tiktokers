@@ -62,42 +62,39 @@
 
 ---
 
-## Инструкция по установке и развертыванию Backend
-### How to start
+## 1. Инструкция по установке и развертыванию Backend
 ```
 cd backend
 fastapi run --host 0.0.0.0 --port 443 main.py
 ```
 
-## Инструкция по установке и развертыванию Speechrecognition backend
-### How to start
-docker build on gpu
+## 2. Инструкция по развертыванию Speechrecognition backend
+### Сборка докер-контейнера на gpu
 ```
 cd speechrecognition/docker
 docker compose -p <unique-container-name> -f docker-compose.yml -f gpu.docker-compose.yml build
 docker compose -p <unique-container-name> -f docker-compose.yml -f gpu.docker-compose.yml up -d speechrec
 ```
-docker build on cpu
+### Сборка докер-контейнера на cpu
 ```
 cd speechrecognition/docker
 docker compose -p <unique-container-name> -f docker-compose.yml build
 docker compose -p <unique-container-name> -f docker-compose.yml up -d speechrec
 ```
-check logs
+### Проверка логов
 ```
 docker compose -p <unique-container-name> -f docker-compose.yml -f gpu.docker-compose.yml logs --follow
 ```
 
-### Environment variables
+### Переменные окружения
 In docker-compose.yml:
 - use_separator - including/excluding music separation from audio (True or False)
 - HOST - host address of docker container
 - PORT - port of docker container
-in gpu.docker-compose.yml:
 - device - inference device (cuda or cuda:0 or cpu)
 
 
-### How to send requests
+### Инструкция отправки запросов к сервису
 ```
 import sys
 sys.path.append("speechrecognition/app")
@@ -142,7 +139,7 @@ if __name__ == "__main__":
     print(await stt_request(path))
 ```
 
-## Инструкция по установке и использованию Video captioning module
+## 3. Инструкция по установке и использованию Video captioning module
 
 Модуль для генерации описаний к видео.
 
@@ -151,7 +148,7 @@ if __name__ == "__main__":
 ### Установка
 
 1. Установите LLaVA-NeXT, следуя инструкции на их [официальном репозитории](https://github.com/LLaVA-VL/LLaVA-NeXT/tree/inference).
-2. Установите зависимости: ```pip install -r requirements.txt```
+2. Установите зависимости: ```pip install -r llava/requirements.txt```
 
 ### Использование
 
@@ -167,7 +164,7 @@ print(captioner.get_caption("path/to/video.mp4"))
 1. Настроить конфиг в файле [run_worker.py](../run_worker.py)
 2. Запустить: `python run_worker.py`
 
-## Инструкция по установке и использованию vllm serve
+## 4. Инструкция по установке и использованию vllm serve
 Требуемые ресурсы: 
 ```
 LLaMA 3 8B requires around 16GB of disk space and 20GB of VRAM (GPU memory) in FP16. 
@@ -175,7 +172,7 @@ LLaMA 3 8B requires around 16GB of disk space and 20GB of VRAM (GPU memory) in F
 - Установка зависимостей
 
 ```
-pip install -r requirements.txt
+pip install -r llm/requirements.txt
 ```
 
 - Зарегистрироваться на HuggingFace и подписать лицензионное соглашние, загрузить модель. [link](https://huggingface.co/meta-llama/Meta-Llama-3-8B)
@@ -212,13 +209,13 @@ print(text)
 ```
 
 
-## Инструкция по установке и использованию OCR module
+## 5. Инструкция по установке и использованию OCR module
 
 ### Начало работы
 
 Установите зависимости:
 
-`pip install -r -requirements.txt`
+`pip install -r backend/requirements.txt`
 
 Для получения текста из видео выполните код ниже:
 
