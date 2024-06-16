@@ -1,16 +1,30 @@
 # Speechrecognition backend
 
 ## How to start
-docker building
+docker building on gpu
 ```
 cd docker
 docker compose -p <unique-container-name> -f docker-compose.yml -f gpu.docker-compose.yml build
 docker compose -p <unique-container-name> -f docker-compose.yml -f gpu.docker-compose.yml up -d speechrec
 ```
+docker building on cpu
+```
+cd docker
+docker compose -p <unique-container-name> -f docker-compose.yml build
+docker compose -p <unique-container-name> -f docker-compose.yml up -d speechrec
+```
 check logs
 ```
 docker compose -p <unique-container-name> -f docker-compose.yml -f gpu.docker-compose.yml logs --follow
 ```
+## Environment variables
+in docker-compose.yml:
+- use_separator - including/excluding music separation from audio (True or False)
+- HOST - host address of docker container
+- PORT - port of docker container
+in gpu.docker-compose.yml:
+- device - inference device (cuda or cuda:0 or cpu)
+
 
 ## How to send requests
 ```
