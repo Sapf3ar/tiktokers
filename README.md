@@ -62,14 +62,14 @@
 
 ---
 
-## Инструкция по установке и развертыванию Backend
+## 1. Инструкция по установке и развертыванию Backend
 ### How to start
 ```
 cd backend
 fastapi run --host 0.0.0.0 --port 443 main.py
 ```
 
-## Инструкция по установке и развертыванию Speechrecognition backend
+## 2. Инструкция по установке и развертыванию Speechrecognition backend
 ### How to start
 docker build on gpu
 ```
@@ -142,7 +142,7 @@ if __name__ == "__main__":
     print(await stt_request(path))
 ```
 
-## Инструкция по установке и использованию Video captioning module
+## 3. Инструкция по установке и использованию Video captioning module
 
 Модуль для генерации описаний к видео.
 
@@ -167,7 +167,7 @@ print(captioner.get_caption("path/to/video.mp4"))
 1. Настроить конфиг в файле [run_worker.py](../run_worker.py)
 2. Запустить: `python run_worker.py`
 
-## Инструкция по установке и использованию vllm serve
+## 4. Инструкция по установке и использованию vllm serve
 Требуемые ресурсы: 
 ```
 LLaMA 3 8B requires around 16GB of disk space and 20GB of VRAM (GPU memory) in FP16. 
@@ -212,7 +212,7 @@ print(text)
 ```
 
 
-## Инструкция по установке и использованию OCR module
+## 5. Инструкция по установке и использованию OCR module
 
 ### Getting started
 
